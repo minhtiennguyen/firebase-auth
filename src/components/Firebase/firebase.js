@@ -1,5 +1,6 @@
 import app from 'firebase/app';
 import 'firebase/auth';
+import 'firebase/database';
 import FireBaseContext, { withFirebase } from './context';
 
 // const prodConfig = {
@@ -26,6 +27,7 @@ class FireBase {
   constructor() {
     app.initializeApp(devConfig);
     this.auth = app.auth();
+    this.db = app.database();
   }
 
   createUserWithEmailAndPassword = (email, password) => this.auth.createUserWithEmailAndPassword(email, password);
@@ -37,6 +39,11 @@ class FireBase {
   resetPassword = email => this.auth.sendPasswordResetEmail(email);
 
   updatePassword = password => this.auth.currentUser.updatePassword(password);
+
+  // User APIs
+  user = uid => this.db.ref(`users/${uid}`);
+
+  users = () => this.db.ref('users');
 }
 
 export default FireBase;
